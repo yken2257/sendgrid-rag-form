@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 // Basic Authentication middleware
 export const config = {
-	matcher: ["/:path*"], // "/:path*" is a catch-all route
+	matcher: [], // "/:path*" is a catch-all route
 };
 
 export function middleware(req: NextRequest) {
