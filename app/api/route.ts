@@ -12,6 +12,7 @@ import {
 } from "@langchain/core/runnables";
 import type { Document } from "@langchain/core/documents";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { awaitAllCallbacks } from "@langchain/core/callbacks/promises";
 
 const TEMPLATE = `あなたはSendGridユーザの質問に答えるAIアシスタントです。
 質問者はあなたの回答で解決できなければ、SendGridのサポートに問い合わせることになります。
@@ -76,7 +77,10 @@ export async function POST(req: NextRequest) {
 		new StringOutputParser(),
 	]);
 
-	const stream = await ragChain.stream(prompt);
-
-	return LangChainAdapter.toDataStreamResponse(stream);
+  try {
+  	const stream = await ragChain.stream(prompt);
+	  return LangChainAdapter.toDataStreamResponse(stream);
+  } finally {
+    await awaitAllCallbacks();
+  }
 }
