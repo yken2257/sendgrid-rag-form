@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { LangChainAdapter } from "ai";
 
 import { OpenAIEmbeddings } from "@langchain/openai";
@@ -13,6 +13,8 @@ import {
 import type { Document } from "@langchain/core/documents";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { awaitAllCallbacks } from "@langchain/core/callbacks/promises";
+
+export const maxDuration = 30;
 
 const TEMPLATE = `あなたはSendGridユーザの質問に答えるAIアシスタントです。
 質問者はあなたの回答で解決できなければ、SendGridのサポートに問い合わせることになります。
@@ -56,7 +58,10 @@ export async function POST(req: NextRequest) {
 
 	const embeddings = new OpenAIEmbeddings({ model: "text-embedding-3-small" });
 	const pinecone = new PineconeClient();
-	const pineconeIndex = pinecone.Index(process.env.PINECONE_INDEX!);
+	const pineconeIndex = pinecone.Index(process.env.PINECONE_INDEX ?? "");
+	if (!process.env.PINECONE_INDEX) {
+		throw new Error("PINECONE_INDEX environment variable is not set");
+	}
 	const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
 		pineconeIndex,
 		maxConcurrency: 5,
