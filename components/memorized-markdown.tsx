@@ -94,8 +94,8 @@ MemoizedMarkdownBlock.displayName = "MemoizedMarkdownBlock";
 export const MemoizedMarkdown = memo(({ content }: { content: string }) => {
 	const blocks = useMemo(() => parseMarkdownIntoBlocks(content), [content]);
 
-	return blocks.map((block, index) => (
-		<MemoizedMarkdownBlock content={block} key={`block_${index}`} />
+	return blocks.map((block) => (
+		<MemoizedMarkdownBlock content={block} key={block} />
 	));
 });
 

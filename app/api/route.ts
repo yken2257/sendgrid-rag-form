@@ -14,6 +14,7 @@ import type { Document } from "@langchain/core/documents";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { awaitAllCallbacks } from "@langchain/core/callbacks/promises";
 
+export const runtime = "edge";
 export const maxDuration = 30;
 
 const TEMPLATE = `あなたはSendGridユーザの質問に答えるAIアシスタントです。
