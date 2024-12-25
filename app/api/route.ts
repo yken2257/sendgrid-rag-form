@@ -12,7 +12,7 @@ import {
 } from "@langchain/core/runnables";
 import type { Document } from "@langchain/core/documents";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-import { awaitAllCallbacks } from "@langchain/core/callbacks/promises";
+// import { awaitAllCallbacks } from "@langchain/core/callbacks/promises";
 
 export const runtime = "edge";
 export const maxDuration = 30;
@@ -83,10 +83,6 @@ export async function POST(req: NextRequest) {
 		new StringOutputParser(),
 	]);
 
-  try {
-  	const stream = await ragChain.stream(prompt);
-	  return LangChainAdapter.toDataStreamResponse(stream);
-  } finally {
-    await awaitAllCallbacks();
-  }
+	const stream = await ragChain.stream(prompt);
+	return LangChainAdapter.toDataStreamResponse(stream);
 }
