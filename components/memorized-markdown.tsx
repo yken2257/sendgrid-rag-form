@@ -94,8 +94,17 @@ MemoizedMarkdownBlock.displayName = "MemoizedMarkdownBlock";
 export const MemoizedMarkdown = memo(({ content }: { content: string }) => {
 	const blocks = useMemo(() => parseMarkdownIntoBlocks(content), [content]);
 
-	return blocks.map((block) => (
-		<MemoizedMarkdownBlock content={block} key={block} />
+	function createHash(str: string) {
+		let hash = 0;
+		for (let i = 0; i < str.length; i++) {
+			hash = (hash << 5) - hash + str.charCodeAt(i);
+			hash |= 0;
+		}
+		return hash.toString(16);
+	}
+
+	return blocks.map((block, index) => (
+		<MemoizedMarkdownBlock content={block} key={`${createHash(block)}-${index}`} />
 	));
 });
 
