@@ -4,120 +4,20 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
-import { HelpCircle, LoaderCircle } from "lucide-react";
 
-import { useCompletion } from "ai/react";
-import { MemoizedMarkdown } from "@/components/memorized-markdown";
+import RagForm from "@/components/RagForm";
 
 export default function ContactForm() {
 	const [file, setFile] = useState<File | null>(null);
-	const {
-		completion,
-		input,
-		handleInputChange,
-		handleSubmit,
-		error,
-		data,
-		isLoading,
-	} = useCompletion({ api: "/api" });
 
 	return (
-		<div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg">
-			<h1 className="text-2xl font-normal mb-8 text-center">お問い合わせ</h1>
+		<div className="w-full max-w-4xl mx-auto p-6 bg-white rounded-lg">
+			<h1 className="text-2xl font-normal mb-8 text-center">お問い合わせフォーム</h1>
 
 			<div className="space-y-6">
 				<div className="space-y-4">
-					<form onSubmit={handleSubmit}>
-						<div className="flex items-center gap-2 mb-1">
-							<Label htmlFor="content">内容</Label>
-							<span className="text-xs px-2 py-0.5 bg-blue-500 text-white rounded">
-								必須
-							</span>
-						</div>
-						<Textarea
-							id="content"
-							value={input}
-							required
-							className="min-h-[150px]"
-							onChange={handleInputChange}
-						/>
-						<div className="flex items-center gap-2 mt-8 mb-16 justify-center">
-							<Button
-								type="submit"
-								variant="outline"
-								disabled={isLoading || !input}
-								className={
-									isLoading
-										? "bg-slate-500 text-white text-base border-none w-1/3"
-										: "bg-orange-500 hover:bg-orange-600 text-white text-base border-none w-1/3"
-								}
-							>
-								{isLoading ? (
-									<LoaderCircle className="animate-spin w-6 h-6" />
-								) : (
-									"まずAIに聞いてみる"
-								)}
-							</Button>
-							<Dialog>
-								<DialogTrigger asChild>
-									<Button
-										variant="ghost"
-										size="icon"
-										className="rounded-full w-6 h-6 p-0"
-									>
-										<HelpCircle className="w-4 h-4" />
-										<span className="sr-only">AIアシスタントについて</span>
-									</Button>
-								</DialogTrigger>
-								<DialogContent>
-									<DialogHeader>
-										<DialogTitle>AIアシスタントについて</DialogTitle>
-										<DialogDescription>
-											AIがあなたの質問内容を分析し、関連する回答や解決策を提案します。
-										</DialogDescription>
-										<div className="mt-4">
-											<p className="text-sm text-muted-foreground">
-												以下のような支援が可能です：
-											</p>
-											<ul className="list-disc list-inside mt-2 space-y-1 text-sm text-muted-foreground">
-												<li>よくある質問への即時回答</li>
-												<li>関連するドキュメントの提案</li>
-												<li>トラブルシューティングのガイダンス</li>
-												<li>具体的な解決手順の提示</li>
-											</ul>
-										</div>
-									</DialogHeader>
-								</DialogContent>
-							</Dialog>
-						</div>
-					</form>
-					<div className="flex items-center mt-8 mb-1">
-						{data && (
-							<pre className="p-4 text-sm bg-gray-100">
-								{JSON.stringify(data, null, 2)}
-							</pre>
-						)}
-						{error && (
-							<div className="fixed top-0 left-0 w-full p-4 text-center text-white bg-red-500">
-								{error.message}
-							</div>
-						)}
-						{completion && (
-							<div className="prose bg-gray-100 rounded-lg p-4">
-								<MemoizedMarkdown content={completion} />
-							</div>
-						)}
-					</div>
+					<RagForm />
 
 					<h2 className="text-xl mt-36 text-center">サポートへ送信</h2>
 					<div>

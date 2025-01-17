@@ -12,7 +12,7 @@ import {
 } from "@langchain/core/runnables";
 import type { Document } from "@langchain/core/documents";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-// import { awaitAllCallbacks } from "@langchain/core/callbacks/promises";
+import { RunCollectorCallbackHandler } from "@langchain/core/tracers/run_collector";
 
 export const runtime = "edge";
 export const maxDuration = 30;
@@ -55,7 +55,7 @@ const combineDocumentsFn = (docs: Document[]) => {
 };
 
 export async function POST(req: NextRequest) {
-	const { prompt } = await req.json();
+	const { prompt, runId } = await req.json();
 
 	const embeddings = new OpenAIEmbeddings({ model: "text-embedding-3-small" });
 	const pinecone = new PineconeClient();
@@ -81,8 +81,11 @@ export async function POST(req: NextRequest) {
 		promptTempl,
 		llm,
 		new StringOutputParser(),
-	]);
+	]).withConfig({
+		runId: runId,
+	});
 
-	const stream = await ragChain.stream(prompt);
+	const runCollector = new RunCollectorCallbackHandler();
+	const stream = await ragChain.stream(prompt, { callbacks: [runCollector] });
 	return LangChainAdapter.toDataStreamResponse(stream);
 }
