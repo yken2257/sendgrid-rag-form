@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
 	const retriever = vectorStore.asRetriever({ k: 5 });
 	const retrievalChain = retriever.pipe(combineDocumentsFn);
 	const llm = new ChatGoogleGenerativeAI({
-		model: "gemini-2.0-flash-exp",
+		model: "gemini-2.0-flash",
 		temperature: 0,
 	});
 	const ragChain = RunnableSequence.from([
