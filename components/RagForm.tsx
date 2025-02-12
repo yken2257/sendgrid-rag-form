@@ -66,15 +66,15 @@ export default function RagForm() {
 					className="min-h-[150px]"
 					onChange={handleInputChange}
 				/>
-				<div className="flex items-center gap-2 mt-8 mb-16 justify-center">
+				<div className="flex flex-wrap items-center gap-2 mt-8 mb-16 justify-center">
 					<Button
 						type="submit"
 						variant="outline"
 						disabled={isLoading || !input || !!completion}
 						className={
 							isLoading
-								? "bg-slate-500 text-white text-base border-none w-1/4"
-								: "bg-orange-500 hover:bg-orange-600 text-white text-base border-none w-1/4"
+								? "bg-slate-500 text-white text-base border-none w-full sm:w-1/4 whitespace-nowrap"
+								: "bg-orange-500 hover:bg-orange-600 text-white text-base border-none w-full sm:w-1/4 whitespace-nowrap"
 						}
 					>
 						{isLoading ? (
@@ -93,7 +93,7 @@ export default function RagForm() {
 							setTraceId(uuidv4());
 							setSentFeedback(false);
 						}}
-						className="bg-gray-500 hover:bg-gray-600 text-white text-base border-none"
+						className="bg-gray-500 hover:bg-gray-600 text-white text-base border-none w-full sm:w-auto whitespace-nowrap"
 					>
 						リセット
 					</Button>
@@ -113,7 +113,7 @@ export default function RagForm() {
 				)}
 				{completion && (
 					<div className="space-y-4">
-						<div className="prose bg-gray-100 rounded-lg p-4">
+						<div className="prose bg-gray-100 rounded-lg p-4 break-all">
 							<MemoizedMarkdown content={completion} />
 						</div>
 						<div className="flex gap-4 justify-center">
